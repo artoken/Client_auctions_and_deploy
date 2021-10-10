@@ -41,3 +41,8 @@ ERC-721 based token
 - Web resource for owner, functions:
     1. Adding an art object
     2. Start (close) of trading
+
+
+# Troubleshooting
+- Failed to load config "react-app" to extend from.
+  yarn add eslint-config-react-app
