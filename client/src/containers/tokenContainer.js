@@ -1,11 +1,13 @@
 import React, {Component} from "react";
 import EnglishAuction from "../contracts/EnglishAuction.json";
+import ART_CONTRACT from "../contracts/ART_CONTRACT.json";
 
 class TokenContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
             auction_contract: null,
+            art_contract: null,
             token_id: null,
             token_bnfcr: null,
             token_end_time: null,
@@ -22,25 +24,27 @@ class TokenContainer extends Component {
     }
 
     async componentDidMount() {
-        this.setState({auction_contract: new window.web3.eth.Contract(EnglishAuction.abi, this.props.contarct_address)});
-        this.setState({token_id: await this.state.auction_contract.methods.token_id().call()});
+        const contract = new window.web3.eth.Contract(EnglishAuction.abi, this.props.contract_address)
+        this.setState({auction_contract: contract});
+        this.setState({token_id: await contract.methods.token_id().call()});
 
-        this.setState({token_bnfcr: await this.state.auction_contract.methods.beneficiary().call()})
+        this.setState({token_bnfcr: await contract.methods.beneficiary().call()})
 
-        this.setState({token_end_time: await this.state.auction_contract.methods.auctionEndTime().call()})
+        this.setState({token_end_time: await contract.methods.auctionEndTime().call()})
         let maxDate = new Date(this.state.token_end_time * 1000);
         this.setState({token_end_date: String(maxDate)})
 
-        this.setState({token_highbidder: await this.state.auction_contract.methods.highestBidder().call()})
+        this.setState({token_highbidder: await contract.methods.highestBidder().call()})
 
-        this.setState({token_highbid: await this.state.auction_contract.methods.highestBid().call()})
+        this.setState({token_highbid: await contract.methods.highestBid().call()})
 
-        this.setState({token_startprice: await this.state.auction_contract.methods.startPrice().call()})
+        this.setState({token_startprice: await contract.methods.startPrice().call()})
 
-        this.setState({token_link: await this.state.artToken.methods.get_link_by_token_id(this.state.token_id).call()})
+        let art_contract = new window.web3.eth.Contract(ART_CONTRACT.abi, ART_CONTRACT.networks["5777"].address)
+        this.setState({token_link: await art_contract.methods.get_link_by_token_id(this.state.token_id).call()})
         this.setState({link_for_auction: 'https://ipfs.io/ipfs/' + this.state.token_link})
 
-        let massiv = await this.state.auction_contract.methods.bid_range().call()
+        let massiv = await contract.methods.bid_range().call()
         this.setState({token_min_limit: massiv[0]});
         this.setState({token_max_limit: massiv[1]});
     }

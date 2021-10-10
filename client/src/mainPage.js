@@ -23,12 +23,13 @@ class MainPage extends Component {
         }
     }
 
-    async componentWillMount() {
+    async UNSAFE_componentWillMount() {
         await this.loadWeb3()
         await this.loadBlockchainData()
     }
 
     async loadBlockchainData() {
+        
         const web3 = window.web3
 
         const accounts = await web3.eth.getAccounts()
@@ -41,7 +42,9 @@ class MainPage extends Component {
             this.setState({auctionbox})
             this.setState({linkForEther: 'https://testnet.bscscan.com/address/' + this.state.account})
 
-            let mould_address = await auctionbox.methods.returnAllAuctions().call()
+            var mould_address = await auctionbox.methods.returnAllAuctions().call()
+            console.log("OH FUCK")
+            console.log("Auction box adresses: ", mould_address)
             this.setState({auction_address: mould_address})
 
         } else {
