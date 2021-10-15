@@ -26,13 +26,13 @@ class Navbar extends Component {
 				<div className="collapse navbar-collapse" id="navbarResponsive">
 					<ul class="navbar-nav ml-auto">
 						<li class="nav-item active">
-							<a href="/client" class="nav-link" style={{'box-sizing': 'content-box'}}>Главная</a>
+							<a href="/" class="nav-link" style={{'box-sizing': 'content-box'}}>Главная</a>
 						</li>
 						<li class="nav-item active">
 							<a href="/" class="nav-link" style={{'color':'#fff', 'background-color':'#277cfd', 'box-sizing': 'content-box'}}>Аукционы</a>
 						</li>
 						<li class="nav-item active">
-							<a href="https://bsc.artoken.ru/" class="nav-link" style={{'box-sizing': 'content-box'}}>Смарт-контракт</a>
+							<a href="/comPage" class="nav-link" style={{'box-sizing': 'content-box'}}>Смарт-контракт</a>
 						</li>
 					</ul>
 				</div>

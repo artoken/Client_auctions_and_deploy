@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import Web3 from 'web3';
-import MainPage from'./mainPage'
+import MainPage from'./components/mainPage'
+import ComPage from './components/comPage'
 import {
     BrowserRouter as Router,
     Switch,
@@ -59,6 +60,9 @@ class App extends Component {
                         <Navbar account={this.state.account} linkForEther={this.state.linkForEther}
                                 short={this.state.addressShort}/>
                         <Switch>
+                            <Route path="/comPage">
+                                <ComPage/>
+                            </Route>
                             <Route path="/">
                                 <MainPage/>
                             </Route>

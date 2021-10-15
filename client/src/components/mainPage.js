@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 import Web3 from 'web3';
 
-import "./App.css";
-import EnglishAuction from "./contracts/EnglishAuction.json";
-import ART_CONTRACT from "./contracts/ART_CONTRACT.json";
-import AuctionBox from "./contracts/AuctionBox.json";
-import TokenContainer from "./containers/tokenContainer";
+import "../App.css";
+import EnglishAuction from "../contracts/EnglishAuction.json";
+import ART_CONTRACT from "../contracts/ART_CONTRACT.json";
+import AuctionBox from "../contracts/AuctionBox.json";
+import TokenContainer from "../containers/tokenContainer";
 
 class MainPage extends Component {
     constructor(props) {
@@ -29,7 +29,7 @@ class MainPage extends Component {
     }
 
     async loadBlockchainData() {
-        
+
         const web3 = window.web3
 
         const accounts = await web3.eth.getAccounts()
@@ -40,6 +40,7 @@ class MainPage extends Component {
             this.setState({artToken})
             const auctionbox = new web3.eth.Contract(AuctionBox.abi, AuctionBox.networks["5777"].address)
             this.setState({auctionbox})
+            console.log(AuctionBox.networks["5777"].address)
             this.setState({linkForEther: 'https://testnet.bscscan.com/address/' + this.state.account})
 
             var mould_address = await auctionbox.methods.returnAllAuctions().call()
