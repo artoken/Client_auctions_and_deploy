@@ -8,10 +8,10 @@ class Navbar extends Component {
       <nav className="navbar navbar-expand-md navbar-light  shadow-sm" >
 			<div className="container-fluid" >
 				<div>
-					<a href="https://cbr.ru/press/event/?id=8177" target="_blank" rel="noopener noreferrer" className="navbar-brad" style={{'text-decoration':'none'}}>artoken</a>
+					<a href="https://cbr.ru/press/event/?id=8177" target="_blank" rel="noopener noreferrer" className="navbar-brad" style={{'textDecoration':'none'}}>artoken</a>
 
-					<div style={{'margin-left':'0px','position':'static', 'text-align':'right'}}>
-						<a  href={this.props.linkForEther} style={{"text-decoration":"none","color":"black"}} target="_blank" rel="noopener noreferrer" className="navbar-adr">Your address: {this.props.short}</a>
+					<div style={{'marginLeft':'0px','position':'static', 'textAlign':'right'}}>
+						<a  href={this.props.linkForEther} style={{"textSecoration":"none","color":"black"}} target="_blank" rel="noopener noreferrer" className="navbar-adr">Your address: {this.props.short}</a>
 					</div>
 				</div>
 
@@ -25,17 +25,17 @@ class Navbar extends Component {
 					</div>
 				</button>
 				<div className="collapse navbar-collapse" id="navbarResponsive">
-					<ul class="navbar-nav ml-auto">
-						<li class="nav-item active">
-							<a href="/" class="nav-link" >Главная</a>
+					<ul className="navbar-nav ml-auto">
+						<li className="nav-item active">
+							<a href="/" className="nav-link" >Главная</a>
 						</li>
-						<li class="nav-item">
+						<li className="nav-item">
 							{/*<a href="/" class="nav-link" style={{'color':'#fff', 'background-color':'#277cfd', 'box-sizing': 'content-box'}}>Аукционы</a>*/}
-							<NavLink exact to="/" className="nav-link" activeStyle={{'color':'#fff', 'background-color':'#277cfd', 'box-sizing': 'content-box'}} activeClassName={""}>Аукционы</NavLink>
+							<NavLink exact to="/" className="nav-link" activeStyle={{'color':'#fff', 'backgroundColor':'#277cfd', 'boxSizing': 'content-box'}} activeClassName={""}>Аукционы</NavLink>
 						</li>
-						<li class="nav-item">
+						<li className="nav-item">
 							{/*<a href="/comPage" class="nav-link" style={{'box-sizing': 'content-box'}}>Смарт-контракт</a>*/}
-							<NavLink exact to="/comPage" className="nav-link" activeStyle={{'color':'#fff', 'background-color':'#277cfd', 'box-sizing': 'content-box'}} activeClassName={""}>Смарт-контракт</NavLink>
+							<NavLink exact to="/comPage" className="nav-link" activeStyle={{'color':'#fff', 'backgroundColor':'#277cfd', 'boxSizing': 'content-box'}} activeClassName={""}>Смарт-контракт</NavLink>
 						</li>
 					</ul>
 				</div>

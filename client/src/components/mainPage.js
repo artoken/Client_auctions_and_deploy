@@ -73,17 +73,17 @@ class MainPage extends Component {
                 <div className="row justify-content-center">
                     <div className="col-12 col-md-12 mt-3 col-lg-12 col-xl-12 text-center">
                         <div className="row justify-content-center">
-                            <div className="col-sm-12 col-md-12" style={{"text-align": "center"}}>
+                            <div className="col-sm-12 col-md-12" style={{"textAlign": "center"}}>
                                 <h1 style={{
-                                    "margin-top": "0px",
-                                    "box-sizing": "border-box",
-                                    'font-family': "'Arsenal', sans-serif"
+                                    "marginTop": "0px",
+                                    "boxSizing": "border-box",
+                                    'fontFamily': "'Arsenal', sans-serif"
                                 }}>Активные аукционы</h1>
                             </div>
                         </div>
 
                         <div className="row justify-content-center" id="myAuctions"
-                             style={{"text-align": "center", "box-sizing": "border-box"}}>
+                             style={{"textAlign": "center", "boxSizing": "border-box"}}>
 
                             {this.state.auction_address.map((address, key) => {
                                 return <TokenContainer contract_address={address}/>
