@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { NavLink } from 'react-router-dom'
 
 class Navbar extends Component {
 
@@ -26,13 +27,15 @@ class Navbar extends Component {
 				<div className="collapse navbar-collapse" id="navbarResponsive">
 					<ul class="navbar-nav ml-auto">
 						<li class="nav-item active">
-							<a href="/" class="nav-link" style={{'box-sizing': 'content-box'}}>Главная</a>
+							<a href="/" class="nav-link" >Главная</a>
 						</li>
-						<li class="nav-item active">
-							<a href="/" class="nav-link" style={{'color':'#fff', 'background-color':'#277cfd', 'box-sizing': 'content-box'}}>Аукционы</a>
+						<li class="nav-item">
+							{/*<a href="/" class="nav-link" style={{'color':'#fff', 'background-color':'#277cfd', 'box-sizing': 'content-box'}}>Аукционы</a>*/}
+							<NavLink exact to="/" className="nav-link" activeStyle={{'color':'#fff', 'background-color':'#277cfd', 'box-sizing': 'content-box'}} activeClassName={""}>Аукционы</NavLink>
 						</li>
-						<li class="nav-item active">
-							<a href="/comPage" class="nav-link" style={{'box-sizing': 'content-box'}}>Смарт-контракт</a>
+						<li class="nav-item">
+							{/*<a href="/comPage" class="nav-link" style={{'box-sizing': 'content-box'}}>Смарт-контракт</a>*/}
+							<NavLink exact to="/comPage" className="nav-link" activeStyle={{'color':'#fff', 'background-color':'#277cfd', 'box-sizing': 'content-box'}} activeClassName={""}>Смарт-контракт</NavLink>
 						</li>
 					</ul>
 				</div>

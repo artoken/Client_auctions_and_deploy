@@ -60,10 +60,10 @@ class App extends Component {
                         <Navbar account={this.state.account} linkForEther={this.state.linkForEther}
                                 short={this.state.addressShort}/>
                         <Switch>
-                            <Route path="/comPage">
+                            <Route exact path="/comPage">
                                 <ComPage/>
                             </Route>
-                            <Route path="/">
+                            <Route exact path="/">
                                 <MainPage/>
                             </Route>
                         </Switch>

@@ -1,9 +1,7 @@
 import React, {Component} from "react";
-import Web3 from 'web3';
 import ART_CONTRACT from '../contracts/ART_CONTRACT.json'
 import EnglishAuction from '../contracts/EnglishAuction.json'
 
-import Navbar from './Navbar'
 import "../App.css";
 
 class ComPage extends Component {
