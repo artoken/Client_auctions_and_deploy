@@ -25,6 +25,8 @@ class TokenContainer extends Component {
 
     async componentDidMount() {
         const contract = new window.web3.eth.Contract(EnglishAuction.abi, this.props.contract_address)
+        const accounts = await web3.eth.getAccounts()
+        this.setState({account: accounts[0]})
         this.setState({auction_contract: contract});
         this.setState({token_id: await contract.methods.token_id().call()});
 
