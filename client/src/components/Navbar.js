@@ -27,7 +27,7 @@ class Navbar extends Component {
 				<div className="collapse navbar-collapse" id="navbarResponsive">
 					<ul className="navbar-nav ml-auto">
 						<li className="nav-item active">
-							<a href="/" className="nav-link" >Главная</a>
+							<a href="/client" className="nav-link" >Главная</a>
 						</li>
 						<li className="nav-item">
 							{/*<a href="/" class="nav-link" style={{'color':'#fff', 'background-color':'#277cfd', 'box-sizing': 'content-box'}}>Аукционы</a>*/}
