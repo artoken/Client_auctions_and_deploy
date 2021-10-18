@@ -57,11 +57,12 @@ class TokenContainer extends Component {
         const auction_contract = this.state.auction_contract;
         let to_return = await auction_contract.methods.get_latest_bid(this.state.account).call()
 
-        let amount_to_return = to_return.toString()
-        console.log(amount_to_return)
 
-        if (amount_to_return === "0") {
+        console.log(to_return)
+
+        if (to_return === 0) {
             try {
+                amount = amount*(10**18)
                 await auction_contract.methods.bid().send({value: amount.toString(), from: this.state.account})
             } catch (e) {
                 console.log('Error, deposit: ', e)
@@ -71,7 +72,7 @@ class TokenContainer extends Component {
                 console.log(amount)
                 amount = amount * (10 ** 18)
                 console.log(amount)
-                let minus_delta = amount - amount_to_return
+                let minus_delta = amount - to_return
                 console.log(minus_delta)
                 await auction_contract.methods.bid().send({value: minus_delta, from: this.state.account})
             } catch (e) {
