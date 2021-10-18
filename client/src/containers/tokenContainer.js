@@ -25,7 +25,7 @@ class TokenContainer extends Component {
 
     async componentDidMount() {
         const contract = new window.web3.eth.Contract(EnglishAuction.abi, this.props.contract_address)
-        const accounts = await web3.eth.getAccounts()
+        const accounts = await window.web3.eth.getAccounts()
         this.setState({account: accounts[0]})
         this.setState({auction_contract: contract});
         this.setState({token_id: await contract.methods.token_id().call()});
@@ -54,7 +54,6 @@ class TokenContainer extends Component {
 
     async deposit(amount, address) {
         console.log(amount)
-        const web3 = window.web3
         const auction_contract = this.state.auction_contract;
         let to_return = await auction_contract.methods.get_latest_bid(this.state.account).call()
 
