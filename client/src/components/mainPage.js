@@ -44,7 +44,6 @@ class MainPage extends Component {
             this.setState({linkForEther: 'https://testnet.bscscan.com/address/' + this.state.account})
 
             var mould_address = await auctionbox.methods.returnAllAuctions().call()
-            console.log("OH FUCK")
             console.log("Auction box adresses: ", mould_address)
             this.setState({auction_address: mould_address})
 
