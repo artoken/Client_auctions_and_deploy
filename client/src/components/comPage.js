@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import ART_CONTRACT from '../contracts/ART_CONTRACT.json'
+import DiamondContract from '../contracts/Diamond.json'
 import EnglishAuction from '../contracts/EnglishAuction.json'
 
 import "../App.css";
@@ -37,7 +37,7 @@ class ComPage extends Component {
         console.log(accounts)
 
         if (true) {
-            const artToken = new web3.eth.Contract(ART_CONTRACT.abi, ART_CONTRACT.networks["5777"].address)
+            const artToken = new web3.eth.Contract(DiamondContract.abi, DiamondContract.networks["5777"].address)
             this.setState({artToken})
             this.setState({linkforether: 'https://testnet.bscscan.com/address/' + this.state.account})
 
@@ -68,6 +68,7 @@ class ComPage extends Component {
         try {
             console.log(to)
             console.log("this is state", this.state.account)
+            console.log(this.state.artToken)
             await this.state.artToken.methods.approve(to, shareid).send({from: this.state.account})
         } catch (e) {
             console.log('Error, allow: ', e)
@@ -78,7 +79,7 @@ class ComPage extends Component {
     async get_art(token_id) {
         if (this.state.auctionbox !== 'undefined') {
             try {
-                let art = await this.state.artToken.methods.get_art_by_share_id(token_id).call()
+                let art = await this.state.artToken.methods.getArtToken(token_id).call()
                 console.log(art)
                 window.alert("Owner: " + art[1] + "\nСущность: " + art[2] + "\nНазвание: " + art[3] + "\nАвтор: " + art[4])
             } catch (e) {

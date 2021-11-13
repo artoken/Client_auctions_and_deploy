@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import EnglishAuction from "../contracts/EnglishAuction.json";
-import ART_CONTRACT from "../contracts/ART_CONTRACT.json";
+import DiamondContract from "../contracts/Diamond.json";
 
 class TokenContainer extends Component {
     constructor(props) {
@@ -42,11 +42,12 @@ class TokenContainer extends Component {
 
         this.setState({token_startprice: await contract.methods.startPrice().call()})
 
-        let art_contract = new window.web3.eth.Contract(ART_CONTRACT.abi, ART_CONTRACT.networks["5777"].address)
-        this.setState({token_link: await art_contract.methods.get_link_by_token_id(this.state.token_id).call()})
+        let art_contract = new window.web3.eth.Contract(DiamondContract.abi, DiamondContract.networks["5777"].address)
+        this.setState({token_link: await art_contract.methods.tokenURI(this.state.token_id).call()})
         this.setState({link_for_auction: 'https://ipfs.io/ipfs/' + this.state.token_link})
 
         let massiv = await contract.methods.bid_range().call()
+        console.log(this.props.contract_address, ": ", massiv)
         this.setState({token_min_limit: massiv[0]});
         this.setState({token_max_limit: massiv[1]});
     }

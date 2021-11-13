@@ -3,7 +3,7 @@ import Web3 from 'web3';
 
 import "../App.css";
 import EnglishAuction from "../contracts/EnglishAuction.json";
-import ART_CONTRACT from "../contracts/ART_CONTRACT.json";
+import DiamondContract from "../contracts/Diamond.json";
 import AuctionBox from "../contracts/AuctionBox.json";
 import TokenContainer from "../containers/tokenContainer";
 
@@ -36,7 +36,7 @@ class MainPage extends Component {
         this.setState({account: accounts[0]})
 
         if (true) {
-            const artToken = new web3.eth.Contract(ART_CONTRACT.abi, ART_CONTRACT.networks["5777"].address)
+            const artToken = new web3.eth.Contract(DiamondContract.abi, DiamondContract.networks["5777"].address)
             this.setState({artToken})
             const auctionbox = new web3.eth.Contract(AuctionBox.abi, AuctionBox.networks["5777"].address)
             this.setState({auctionbox})
