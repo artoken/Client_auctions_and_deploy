@@ -34,6 +34,10 @@ class Navbar extends Component {
 							<NavLink exact to="/" className="nav-link" activeStyle={{'color':'#fff', 'backgroundColor':'#277cfd', 'boxSizing': 'content-box'}} activeClassName={""}>Аукционы</NavLink>
 						</li>
 						<li className="nav-item">
+							{/*<a href="/" class="nav-link" style={{'color':'#fff', 'background-color':'#277cfd', 'box-sizing': 'content-box'}}>Аукционы</a>*/}
+							<NavLink exact to="/closed" className="nav-link" activeStyle={{'color':'#fff', 'backgroundColor':'#277cfd', 'boxSizing': 'content-box'}} activeClassName={""}  style={{"line-height": "22.5px"}}>Закрытые Аукционы</NavLink>
+						</li>
+						<li className="nav-item">
 							{/*<a href="/comPage" class="nav-link" style={{'box-sizing': 'content-box'}}>Смарт-контракт</a>*/}
 							<NavLink exact to="/comPage" className="nav-link" activeStyle={{'color':'#fff', 'backgroundColor':'#277cfd', 'boxSizing': 'content-box'}} activeClassName={""}>Смарт-контракт</NavLink>
 						</li>

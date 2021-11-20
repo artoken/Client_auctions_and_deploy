@@ -27,6 +27,13 @@ class ComPage extends Component {
     async componentWillMount() {
         await this.loadBlockchainData()
     }
+    async componentDidMount() {
+        var keywords = ["TRANSFERFROM", "ALLOW", "WITHDRAW", "OWNER", "INFO"];
+        keywords.forEach((item, index) => {
+            document.getElementById(item+"_success").style.display = 'none';
+            document.getElementById(item+"_danger").style.display = 'none';
+        })
+    }
 
     async loadBlockchainData() {
         const web3 = window.web3
@@ -55,10 +62,14 @@ class ComPage extends Component {
             console.log(shareId)
             try {
                 let owner = await this.state.artToken.methods.ownerOf(shareId).call({from: this.state.account})
-                window.alert(owner)
-                console.log(owner)
+                document.getElementById("OWNER_success").style.display = 'block';
+                document.getElementById("OWNER_success").innerText = "Адрес владельца: "+owner;
+                document.getElementById("OWNER_danger").style.display = 'none';
             } catch (e) {
                 console.log('Error, get ownerOf: ', e)
+                document.getElementById("OWNER_danger").style.display = 'block';
+                document.getElementById("OWNER_danger").innerText = e;
+                document.getElementById("OWNER_success").style.display = 'none';
             }
         }
     }
@@ -70,8 +81,14 @@ class ComPage extends Component {
             console.log("this is state", this.state.account)
             console.log(this.state.artToken)
             await this.state.artToken.methods.approve(to, shareid).send({from: this.state.account})
+            document.getElementById("ALLOW_success").style.display = 'block';
+            document.getElementById("ALLOW_success").innerText = "Разрешение успешно передано";
+            document.getElementById("ALLOW_danger").style.display = 'none';
         } catch (e) {
             console.log('Error, allow: ', e)
+            document.getElementById("ALLOW_danger").style.display = 'block';
+            document.getElementById("ALLOW_danger").innerText = e;
+            document.getElementById("ALLOW_success").style.display = 'none';
         }
 
     }
@@ -81,9 +98,14 @@ class ComPage extends Component {
             try {
                 let art = await this.state.artToken.methods.getArtToken(token_id).call()
                 console.log(art)
-                window.alert("Owner: " + art[1] + "\nСущность: " + art[2] + "\nНазвание: " + art[3] + "\nАвтор: " + art[4])
+                document.getElementById("INFO_success").style.display = 'block';
+                document.getElementById("INFO_success").innerText = "Информация о токене:\n"+"Owner: " + art[1] + "\nСущность: " + art[2] + "\nНазвание: " + art[3] + "\nАвтор: " + art[4];
+                document.getElementById("INFO_danger").style.display = 'none';
             } catch (e) {
                 console.log('Error, get_art: ', e)
+                document.getElementById("INFO_danger").style.display = 'block';
+                document.getElementById("INFO_danger").innerText = e;
+                document.getElementById("INFO_success").style.display = 'none';
             }
         }
     }
@@ -94,22 +116,14 @@ class ComPage extends Component {
         if (this.state.auctionbox !== 'undefined') {
             try {
                 await this.state.artToken.methods.safeTransferFrom(from, to, shareid).send({from: this.state.account})
+                document.getElementById("TRANSFERFROM_success").style.display = 'block';
+                document.getElementById("TRANSFERFROM_success").innerText = "Транзакция успешно завершена";
+                document.getElementById("TRANSFERFROM_danger").style.display = 'none';
             } catch (e) {
                 console.log('Error, transfer_from: ', e)
-            }
-        }
-    }
-
-    async endow_share(from, to, shareid, howmuch) {
-        console.log(from)
-        console.log(to)
-        console.log(shareid)
-        console.log(howmuch)
-        if (this.state.auctionbox !== 'undefined') {
-            try {
-                await this.state.artToken.methods.endow_share(from, to, shareid, howmuch).send({from: this.state.account})
-            } catch (e) {
-                console.log('Error, endow share: ', e)
+                document.getElementById("TRANSFERFROM_danger").style.display = 'block';
+                document.getElementById("TRANSFERFROM_danger").innerText = e;
+                document.getElementById("TRANSFERFROM_success").style.display = 'none';
             }
         }
     }
@@ -120,21 +134,14 @@ class ComPage extends Component {
         if (this.state.auctionbox !== 'undefined') {
             try {
                 await auction_contract.methods.withdraw().send({from: this.state.account})
+                document.getElementById("WITHDRAW_success").style.display = 'block';
+                document.getElementById("WITHDRAW_success").innerText = "Транзакция успешно завершена";
+                document.getElementById("WITHDRAW_danger").style.display = 'none';
             } catch (e) {
                 console.log('Error, withdraw: ', e)
-            }
-        }
-    }
-
-
-    async get_share(from, token_id) {
-        if (this.state.auctionbox !== 'undefined') {
-            try {
-                let share = await this.state.artToken.methods.get_share_in_token(from, token_id).call({from: this.state.account})
-                //await this.state.artToken.methods.ownerOf(shareId).send({from: this.state.account})
-                window.alert("Ваша доля в токене: " + share + " %")
-            } catch (e) {
-                console.log('Error, get_share: ', e)
+                document.getElementById("WITHDRAW_danger").style.display = 'block';
+                document.getElementById("WITHDRAW_danger").innerText = e;
+                document.getElementById("WITHDRAW_success").style.display = 'none';
             }
         }
     }
@@ -147,9 +154,11 @@ class ComPage extends Component {
                     <div class="container">
                         <div className="container-fluid">
                             <div class="row" style={{"padding": "10px", "text-align": "center"}}>
-                                <div className="col-sm-5 col-md-3" style={{" text-align": "left"}}>
+                                <div className="col-12" style={{" text-align": "left"}}>
 
                                     <div class="card" style={{"padding": "15px", "margin": "15px"}}>
+                                        <div id="ALLOW_danger" className="alert alert-danger"></div>
+                                        <div id="ALLOW_success" className="alert alert-success"></div>
                                         <form onSubmit={(e) => {
                                             e.preventDefault()
                                             let to = this.TO_ALLOW.value
@@ -167,7 +176,7 @@ class ComPage extends Component {
                                                 }} className='btn btn-primary mb-2'><i class="far fa-check-circle"></i>
                                                 </button>
                                                 <h3 style={{"border-radius": "50px", "margin": "10px"}}>
-                                                    <strong> allow</strong></h3>
+                                                    <strong> Передать токен на аукцион</strong></h3>
                                             </div>
                                             <div class="row" style={{"padding": "10px"}}>
                                                 <div class="col-sm-10 col-md-10">
@@ -179,7 +188,7 @@ class ComPage extends Component {
                                                                 this.TO_ALLOW = input
                                                             }}
                                                             className="form-control mt-2"
-                                                            placeholder='_to'
+                                                            placeholder='Адрес аукциона или доверенного лица'
                                                             required/>
                                                         <input
                                                             id='shareID_ALLOW'
@@ -188,7 +197,7 @@ class ComPage extends Component {
                                                                 this.shareID_ALLOW = input
                                                             }}
                                                             className="form-control  mt-2"
-                                                            placeholder='_share_id'
+                                                            placeholder='Идентификатор токена'
                                                             required/>
                                                     </div>
                                                 </div>
@@ -198,9 +207,10 @@ class ComPage extends Component {
                                     </div>
                                 </div>
 
-                                <div className="col-sm-5 col-md-3" style={{" text-align": "left"}}>
-
+                                <div className="col-12" style={{" text-align": "left"}}>
                                     <div class="card" style={{"padding": "15px", "margin": "15px"}}>
+                                        <div id="OWNER_danger" className="alert alert-danger"></div>
+                                        <div id="OWNER_success" className="alert alert-success"></div>
                                         <form onSubmit={(e) => {
                                             e.preventDefault()
                                             let shareID = this.shareID_Owner.value
@@ -216,7 +226,7 @@ class ComPage extends Component {
                                                     "border": "solid 1px #B22222"
                                                 }} className='btn btn-primary mb-2'><i class="fas fa-user"></i></button>
                                                 <h3 style={{"border-radius": "50px", "margin": "10px"}}>
-                                                    <strong> owner_of</strong></h3>
+                                                    <strong> Узнать владельца токена</strong></h3>
                                             </div>
                                             <div class="row" style={{"padding": "10px"}}>
                                                 <div class="col-sm-10 col-md-10">
@@ -228,7 +238,7 @@ class ComPage extends Component {
                                                                 this.shareID_Owner = input
                                                             }}
                                                             className="form-control mt-2"
-                                                            placeholder='_share_id'
+                                                            placeholder='Идентификатор токена'
                                                             required/>
                                                     </div>
                                                 </div>
@@ -238,9 +248,11 @@ class ComPage extends Component {
                                     </div>
                                 </div>
 
-                                <div className="col-sm-5 col-md-3" style={{" text-align": "left"}}>
+                                <div className="col-12" style={{" text-align": "left"}}>
 
                                     <div class="card" style={{"padding": "15px", "margin": "15px"}}>
+                                        <div id="INFO_danger" className="alert alert-danger"></div>
+                                        <div id="INFO_success" className="alert alert-success"></div>
                                         <form onSubmit={(e) => {
                                             e.preventDefault()
                                             let token_id = this.tokenID.value
@@ -258,7 +270,7 @@ class ComPage extends Component {
                                                 }} className='btn btn-primary mb-2'><i class="fas fa-search"></i>
                                                 </button>
                                                 <h3 style={{"border-radius": "50px", "margin": "10px"}}>
-                                                    <strong> get_art_by_id</strong></h3>
+                                                    <strong> Информация о токене по id</strong></h3>
                                             </div>
                                             <div class="row" style={{"padding": "10px"}}>
                                                 <div class="col-sm-10 col-md-10">
@@ -270,7 +282,7 @@ class ComPage extends Component {
                                                                 this.tokenID = input
                                                             }}
                                                             className="form-control mt-2"
-                                                            placeholder='_token_id'
+                                                            placeholder='Идентификатор токена'
                                                             required/>
                                                     </div>
                                                 </div>
@@ -281,9 +293,11 @@ class ComPage extends Component {
                                     </div>
                                 </div>
 
-                                <div className="col-sm-5 col-md-3" style={{" text-align": "left"}}>
+                                <div className="col-12" style={{" text-align": "left"}}>
 
                                     <div class="card" style={{"padding": "15px", "margin": "15px"}}>
+                                        <div id="TRANSFERFROM_danger" className="alert alert-danger"></div>
+                                        <div id="TRANSFERFROM_success" className="alert alert-success"></div>
                                         <form onSubmit={(e) => {
                                             e.preventDefault()
                                             let from = this.from_transfer.value
@@ -302,7 +316,7 @@ class ComPage extends Component {
                                                 }} className='btn btn-primary mb-2'><i class="fas fa-exchange-alt"></i>
                                                 </button>
                                                 <h3 style={{"border-radius": "50px", "margin": "10px"}}>
-                                                    <strong> transferFrom</strong></h3>
+                                                    <strong> Отправить токен от третьего лица</strong></h3>
                                             </div>
                                             <div class="row" style={{"padding": "10px"}}>
                                                 <div class="col-sm-10 col-md-10">
@@ -314,7 +328,7 @@ class ComPage extends Component {
                                                                 this.from_transfer = input
                                                             }}
                                                             className="form-control mt-2"
-                                                            placeholder='_from'
+                                                            placeholder='Адрес владельца'
                                                             required/>
                                                         <input
                                                             id='TO_TRANSFER'
@@ -323,7 +337,7 @@ class ComPage extends Component {
                                                                 this.TO_TRANSFER = input
                                                             }}
                                                             className="form-control mt-2"
-                                                            placeholder='_to'
+                                                            placeholder='Адрес получателя'
                                                             required/>
                                                         <input
                                                             id='shareID'
@@ -332,7 +346,7 @@ class ComPage extends Component {
                                                                 this.shareID = input
                                                             }}
                                                             className="form-control form-control-md col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12  mt-2"
-                                                            placeholder='_share_id'
+                                                            placeholder='Идентификатор токена'
                                                             required/>
                                                     </div>
                                                 </div>
@@ -343,80 +357,11 @@ class ComPage extends Component {
                                     </div>
                                 </div>
 
-                                <div className="col-sm-5 col-md-3" style={{" text-align": "left"}}>
+                                <div className="col-12" style={{" text-align": "left"}}>
 
                                     <div class="card" style={{"padding": "15px", "margin": "15px"}}>
-                                        <form onSubmit={(e) => {
-                                            e.preventDefault()
-                                            let from = this.FROM_ENDOW.value
-                                            let to = this.TO_ENDOW.value
-                                            let shareid = this.shareID_ENDOW.value
-                                            let howmuch = this.howMuch.value
-                                            this.endow_share(from, to, shareid, howmuch)
-                                        }}>
-                                            <div class="row" style={{"padding": "10px"}}>
-                                                <button type='submit' style={{
-                                                    "border-radius": "50px",
-                                                    "margin-left": "0px",
-                                                    "margin-right": "0px",
-                                                    "margin-top": "0px",
-                                                    "background-color": "#B22222",
-                                                    "border": "solid 1px #B22222"
-                                                }} className='btn btn-primary mb-2'><i class="far fa-handshake"></i>
-                                                </button>
-                                                <h3 style={{"border-radius": "50px", "margin": "10px"}}>
-                                                    <strong> endow_share</strong></h3>
-                                            </div>
-                                            <div class="row" style={{"padding": "10px"}}>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <div className='form-group mr-sm-2' style={{"max-width": "80%"}}>
-                                                        <input
-                                                            id='FROM_ENDOW'
-                                                            type='string'
-                                                            ref={(input) => {
-                                                                this.FROM_ENDOW = input
-                                                            }}
-                                                            className="form-control mt-2"
-                                                            placeholder='_from'
-                                                            required/>
-                                                        <input
-                                                            id='TO_ENDOW'
-                                                            type='string'
-                                                            ref={(input) => {
-                                                                this.TO_ENDOW = input
-                                                            }}
-                                                            className="form-control mt-2"
-                                                            placeholder='_to'
-                                                            required/>
-                                                        <input
-                                                            id='shareID_ENDOW'
-                                                            type='unit'
-                                                            ref={(input) => {
-                                                                this.shareID_ENDOW = input
-                                                            }}
-                                                            className="form-control  mt-2"
-                                                            placeholder='_share_id'
-                                                            required/>
-                                                        <input
-                                                            id='howMuch'
-                                                            type='unit'
-                                                            ref={(input) => {
-                                                                this.howMuch = input
-                                                            }}
-                                                            className="form-control mt-2"
-                                                            placeholder='_how_much'
-                                                            required/>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-
-                                <div className="col-sm-5 col-md-3" style={{" text-align": "left"}}>
-
-                                    <div class="card" style={{"padding": "15px", "margin": "15px"}}>
+                                        <div id="WITHDRAW_danger" className="alert alert-danger"></div>
+                                        <div id="WITHDRAW_success" className="alert alert-success"></div>
                                         <form onSubmit={(e) => {
                                             e.preventDefault()
                                             let address_contract = this.ADDRESS_CONTRACT.value
@@ -431,7 +376,7 @@ class ComPage extends Component {
                                                 }} className='btn btn-primary mb-2'><i class="fab fa-elementor"></i>
                                                 </button>
                                                 <h3 style={{"border-radius": "50px", "margin": "10px"}}>
-                                                    <strong>Withdraw</strong></h3>
+                                                    <strong>Вернуть деньги с проигранного аукциона</strong></h3>
                                             </div>
                                             <div class="row" style={{"padding": "10px"}}>
                                                 <div class="col-sm-10 col-md-10">
@@ -443,58 +388,7 @@ class ComPage extends Component {
                                                                 this.ADDRESS_CONTRACT = input
                                                             }}
                                                             className="form-control mt-2"
-                                                            placeholder='Address contract'
-                                                            required/>
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-
-
-                                <div className="col-sm-5 col-md-3" style={{" text-align": "left"}}>
-
-                                    <div class="card" style={{"padding": "15px", "margin": "15px"}}>
-                                        <form onSubmit={(e) => {
-                                            e.preventDefault()
-                                            let token_id_share = this.TOKEN_ID_SHARE.value
-                                            let from_get_share = this.FROM_GET_SHARE.value
-                                            this.get_share(from_get_share, token_id_share)
-                                        }}>
-                                            <div class="row" style={{"padding": "10px"}}>
-                                                <button type='submit' style={{
-                                                    "border-radius": "50px",
-                                                    "margin-top": "10px",
-                                                    "background-color": "#B22222",
-                                                    "border": "solid 1px #B22222"
-                                                }} className='btn btn-primary mb-2'><i class="fab fa-elementor"></i>
-                                                </button>
-                                                <h3 style={{"border-radius": "50px", "margin": "10px"}}>
-                                                    <strong>get_share</strong></h3>
-                                            </div>
-                                            <div class="row" style={{"padding": "10px"}}>
-                                                <div class="col-sm-10 col-md-10">
-                                                    <div className='form-group mr-sm-2' style={{"max-width": "80%"}}>
-                                                        <input
-                                                            id='FROM_GET_SHARE'
-                                                            type='string'
-                                                            ref={(input) => {
-                                                                this.FROM_GET_SHARE = input
-                                                            }}
-                                                            className="form-control mt-2"
-                                                            placeholder='_from'
-                                                            required/>
-                                                        <input
-                                                            id='TOKEN_ID_SHARE'
-                                                            type='string'
-                                                            ref={(input) => {
-                                                                this.TOKEN_ID_SHARE = input
-                                                            }}
-                                                            className="form-control mt-2"
-                                                            placeholder='token_id'
+                                                            placeholder='Адрес аукциона'
                                                             required/>
                                                     </div>
                                                 </div>

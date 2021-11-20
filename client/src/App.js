@@ -7,6 +7,7 @@ import {
     Switch,
     Route,
 } from "react-router-dom";
+import ClosedAuctionsPage from "./components/closedAuctionsPage"
 import { Provider } from 'react-redux';
 
 import Navbar from './components/Navbar'
@@ -62,6 +63,9 @@ class App extends Component {
                         <Switch>
                             <Route exact path="/comPage">
                                 <ComPage/>
+                            </Route>
+                            <Route exact path="/closed">
+                                <ClosedAuctionsPage/>
                             </Route>
                             <Route exact path="/">
                                 <MainPage/>
