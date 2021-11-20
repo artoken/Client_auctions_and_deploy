@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import HashedClosedAuction from "../contracts/HashedClosedAuction.json";
 import DiamondContract from "../contracts/Diamond.json";
 import crypto from 'crypto';
+import {ethers} from 'ethers';
+
 
 class TokenContainer extends Component {
     constructor(props) {
@@ -21,58 +23,63 @@ class TokenContainer extends Component {
     }
 
     async componentDidMount() {
+        console.log("Заебись 0")
         const contract = new window.web3.eth.Contract(HashedClosedAuction.abi, this.props.contract_address)
         const accounts = await window.web3.eth.getAccounts()
         this.setState({account: accounts[0]})
         this.setState({auction_contract: contract});
         this.setState({token_id: await contract.methods.token_id().call()});
-
+        console.log("Заебись 1")
         this.setState({token_bnfcr: await contract.methods.beneficiary().call()})
-
+        console.log("Заебись 2")
         this.setState({token_end_time: await contract.methods.auctionEndTime().call()})
+        console.log("Заебись 3")
         let maxDate = new Date(this.state.token_end_time * 1000);
         this.setState({token_end_date: String(maxDate)})
 
-        this.setState({token_startprice: await contract.methods.startPrice().call()})
+        this.setState({token_startprice: await contract.methods.auctionMinimalBidPrice().call()})
+        console.log("Заебись 4")
+
 
         let art_contract = new window.web3.eth.Contract(DiamondContract.abi, DiamondContract.networks["5777"].address)
         this.setState({token_link: await art_contract.methods.tokenURI(this.state.token_id).call()})
-        this.setState({link_for_auction: 'https://ipfs.io/ipfs/' + this.state.token_link}
+        console.log("Заебись ёбана")
+        this.setState({link_for_auction: 'https://ipfs.io/ipfs/' + this.state.token_link})
     }
 
 
     async deposit(amount, address) {
-        var nonce = Math.random()
-        console.log(amount)
+        // amount = amount*(10**18)
+        var nonce = crypto.randomBytes(32).toString("hex");
         const auction_contract = this.state.auction_contract;
-        let to_return = await auction_contract.methods.get_latest_bid(this.state.account).call()
+        var bidhash = ethers.utils.keccak256(ethers.utils.solidityPack(['uint256', 'string'], [amount, nonce]));
+        console.log("bidhash: ", bidhash);
 
-
-        console.log(to_return)
-
-        if (to_return === 0) {
-            try {
-                amount = amount*(10**18)
-                await auction_contract.methods.bid().send({value: amount.toString(), from: this.state.account})
-            } catch (e) {
-                console.log('Error, deposit: ', e)
-            }
-        } else {
-            try {
-                console.log(amount)
-                amount = amount * (10 ** 18)
-                console.log(amount)
-                let minus_delta = amount - to_return
-                console.log(minus_delta)
-                await auction_contract.methods.bid().send({value: minus_delta, from: this.state.account})
-            } catch (e) {
-                console.log('Error, here: ', e)
-            }
+        try {
+            await auction_contract.methods.bid(bidhash).send({from: this.state.account})
+            var nonces = {...JSON.parse(localStorage.getItem('nonces'))}
+            nonces[this.props.contract_address] = nonce;
+            localStorage.setItem('nonces', JSON.stringify(nonces))
+        } catch (e) {
+            console.log('Error, deposit: ', e)
         }
     }
 
     async approval(amount) {
-        Math.r
+        var nonce = JSON.parse(localStorage.getItem("nonces"))[this.props.contract_address];
+        const auction_contract = this.state.auction_contract;
+        try {
+            await auction_contract.methods.proveBid(amount, nonce).send({from: this.state.account})
+        } catch (e) {
+            console.log("АААААААААААААААААААААААААА: ", e)
+        }
+    }
+
+    async depositButton() {
+        this.deposit(this.depositAmount.value, 0);
+    }
+    async approveButton() {
+        this.approval(this.depositAmount.value);
     }
 
     render() {
@@ -119,9 +126,9 @@ class TokenContainer extends Component {
                                  onMouseOver="this.style.color='#B22222'"
                                  onMouseOut="this.style.color='#000'"><strong>Начальная
                                 цена </strong><span
-                                style={{"color": "#b22222"}}>{this.state.token_startprice / 10 ** 18} bnb</span>
+                                style={{"color": "#b22222"}}>{this.state.token_startprice} bnb</span>
                             </div>
-                            <div className="Adress" style={{"fontSize": "14px"}}
+                            <div className="Adress" style={{"fontSizehttps://reactjs.org/docs/error-decoder.html?invariant=231&args[]=onClick&args[]=object": "14px"}}
                                  onMouseOver="this.style.color='#B22222'"
                                  onMouseOut="this.style.color='#000'">
                                 <strong>Aдрес </strong><span>{this.props.contract_address}</span></div>
@@ -130,37 +137,14 @@ class TokenContainer extends Component {
                                  onMouseOut="this.style.color='#000'">
                                 <strong>Окончание </strong><span>{this.state.token_end_date}</span>
                             </div>
-                            <div className="highBidder" style={{"fontSize": "14px"}}
-                                 onMouseOver="this.style.color='#B22222'"
-                                 onMouseOut="this.style.color='#000'"><strong>Highest
-                                bidder </strong><span>{this.state.token_highbidder}</span>
-                            </div>
-                            <div className="highBidd" style={{"fontSize": "14px"}}
-                                 onMouseOver="this.style.color='#B22222'"
-                                 onMouseOut="this.style.color='#000'"><strong>Highest
-                                bid </strong><span>{this.state.token_highbid / 10 ** 18} bnb</span>
-                            </div>
-                            <div className="highBidd" style={{"fontSize": "14px"}}
-                                 onMouseOver="this.style.color='#B22222'"
-                                 onMouseOut="this.style.color='#000'"><strong>Минимальная
-                                ставка </strong><span>{this.state.token_min_limit / 10 ** 18} bnb</span>
-                            </div>
-                            <div className="highBidd" style={{"fontSize": "14px"}}
-                                 onMouseOver="this.style.color='#B22222'"
-                                 onMouseOut="this.style.color='#000'"><strong>Максимальная
-                                ставка </strong><span>{this.state.token_max_limit / 10 ** 18} bnb</span>
-                            </div>
                             <form onSubmit={(e) => {
                                 e.preventDefault()
-                                let amount = this.depositAmount.value
-                                //amount = amount * 10**18 //convert to wei
-                                this.deposit(amount, this.props.contract_address)
+
                             }}>
                                 <div>
 
                                         <span><input
                                             id='depositAmount'
-                                            step="0.001"
                                             type='number'
                                             ref={(input) => {
                                                 this.depositAmount = input
@@ -170,7 +154,9 @@ class TokenContainer extends Component {
                                             required/>
                                           </span>
                                     <span><button type='submit'
-                                                  className='btn btn-primary mb-2'>Сделать ставку</button></span>
+                                                  className='btn btn-primary mb-2' onClick={this.depositButton.bind(this)}>Сделать ставку</button></span>
+                                    <span><button type='button' onClick={this.approveButton.bind(this)}
+                                                  className='btn btn-primary mb-2 ml-2'>Доказать ставку</button></span>
                                 </div>
 
                             </form>

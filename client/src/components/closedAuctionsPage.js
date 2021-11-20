@@ -4,8 +4,9 @@ import Web3 from 'web3';
 import "../App.css";
 import EnglishAuction from "../contracts/EnglishAuction.json";
 import DiamondContract from "../contracts/Diamond.json";
-import ClosedClosedAuctionBox from "../contracts/ClosedAuctionBox.json";
-import TokenContainer from "../containers/tokenContainer";
+import ClosedAuctionBox from "../contracts/ClosedAuctionBox.json";
+import ClosedTokenContainer from "../containers/closedTokenContainer";
+import crypto from 'crypto';
 
 class ClosedAuctionsPage extends Component {
     constructor(props) {
@@ -85,7 +86,7 @@ class ClosedAuctionsPage extends Component {
                              style={{"textAlign": "center", "boxSizing": "border-box"}}>
 
                             {this.state.auction_address.map((address, key) => {
-                                return <TokenContainer contract_address={address}/>
+                                return <ClosedTokenContainer contract_address={address}/>
                             })}
 
                         </div>
