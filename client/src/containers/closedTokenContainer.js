@@ -23,27 +23,27 @@ class TokenContainer extends Component {
     }
 
     async componentDidMount() {
-        console.log("Заебись 0")
+
         const contract = new window.web3.eth.Contract(HashedClosedAuction.abi, this.props.contract_address)
         const accounts = await window.web3.eth.getAccounts()
         this.setState({account: accounts[0]})
         this.setState({auction_contract: contract});
         this.setState({token_id: await contract.methods.token_id().call()});
-        console.log("Заебись 1")
+
         this.setState({token_bnfcr: await contract.methods.beneficiary().call()})
-        console.log("Заебись 2")
+
         this.setState({token_end_time: await contract.methods.auctionEndTime().call()})
-        console.log("Заебись 3")
+
         let maxDate = new Date(this.state.token_end_time * 1000);
         this.setState({token_end_date: String(maxDate)})
 
         this.setState({token_startprice: await contract.methods.auctionMinimalBidPrice().call()})
-        console.log("Заебись 4")
+
 
 
         let art_contract = new window.web3.eth.Contract(DiamondContract.abi, DiamondContract.networks["5777"].address)
         this.setState({token_link: await art_contract.methods.tokenURI(this.state.token_id).call()})
-        console.log("Заебись ёбана")
+
         this.setState({link_for_auction: 'https://ipfs.io/ipfs/' + this.state.token_link})
     }
 
@@ -57,8 +57,11 @@ class TokenContainer extends Component {
 
         try {
             await auction_contract.methods.bid(bidhash).send({from: this.state.account})
-            var nonces = {...JSON.parse(localStorage.getItem('nonces'))}
-            nonces[this.props.contract_address] = nonce;
+            const nonces = {...JSON.parse(localStorage.getItem('nonces'))};
+            if (!nonces[this.state.account]) {
+                nonces[this.state.account] = {}
+            }
+            nonces[this.state.account][this.props.contract_address] = nonce;
             localStorage.setItem('nonces', JSON.stringify(nonces))
         } catch (e) {
             console.log('Error, deposit: ', e)
@@ -66,12 +69,12 @@ class TokenContainer extends Component {
     }
 
     async approval(amount) {
-        var nonce = JSON.parse(localStorage.getItem("nonces"))[this.props.contract_address];
+        var nonce = JSON.parse(localStorage.getItem("nonces"))[this.state.account][this.props.contract_address];
         const auction_contract = this.state.auction_contract;
         try {
             await auction_contract.methods.proveBid(amount, nonce).send({from: this.state.account})
         } catch (e) {
-            console.log("АААААААААААААААААААААААААА: ", e)
+            console.log("Approval failed: ", e)
         }
     }
 
@@ -89,9 +92,7 @@ class TokenContainer extends Component {
 
                 <div className="card" style={{"padding": "15px", "margin": "15px"}}>
                     <div style={{"background": "#277cfd", "display": "none"}}
-                         className="card-header d-sm-flexjustify-content-center"
-                         onMouseOver="this.style.background='#B22222'"
-                         onMouseOut="this.style.background='#277cfd'">
+                         className="card-header d-sm-flexjustify-content-center">
                         <div className="card-title" style={{
                             "box-sizing": "border-box",
                             "text-align": "center",
@@ -117,24 +118,16 @@ class TokenContainer extends Component {
                             "z-index": "2",
                             "overflow": "hidden"
                         }}>
-                            <div className="Bnfcry" style={{"fontSize": "14px"}}
-                                 onMouseOver="this.style.color='#B22222'"
-                                 onMouseOut="this.style.color='#000'">
+                            <div className="Bnfcry" style={{"fontSize": "14px"}}>
                                 <strong>Бенифициар </strong><span>{this.state.token_bnfcr}</span>
                             </div>
-                            <div className="starting" style={{"fontSize": "14px"}}
-                                 onMouseOver="this.style.color='#B22222'"
-                                 onMouseOut="this.style.color='#000'"><strong>Начальная
+                            <div className="starting" style={{"fontSize": "14px"}}><strong>Начальная
                                 цена </strong><span
                                 style={{"color": "#b22222"}}>{this.state.token_startprice} bnb</span>
                             </div>
-                            <div className="Adress" style={{"fontSizehttps://reactjs.org/docs/error-decoder.html?invariant=231&args[]=onClick&args[]=object": "14px"}}
-                                 onMouseOver="this.style.color='#B22222'"
-                                 onMouseOut="this.style.color='#000'">
+                            <div className="Adress" style={{"fontSizehttps://reactjs.org/docs/error-decoder.html?invariant=231&args[]=onClick&args[]=object": "14px"}}>
                                 <strong>Aдрес </strong><span>{this.props.contract_address}</span></div>
-                            <div className="endTime" style={{"fontSize": "14px"}}
-                                 onMouseOver="this.style.color='#B22222'"
-                                 onMouseOut="this.style.color='#000'">
+                            <div className="endTime" style={{"fontSize": "14px"}}>
                                 <strong>Окончание </strong><span>{this.state.token_end_date}</span>
                             </div>
                             <form onSubmit={(e) => {

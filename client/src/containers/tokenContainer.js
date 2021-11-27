@@ -89,9 +89,7 @@ class TokenContainer extends Component {
 
                 <div className="card" style={{"padding": "15px", "margin": "15px"}}>
                     <div style={{"background": "#277cfd", "display": "none"}}
-                         className="card-header d-sm-flexjustify-content-center"
-                         onMouseOver="this.style.background='#B22222'"
-                         onMouseOut="this.style.background='#277cfd'">
+                         className="card-header d-sm-flexjustify-content-center">
                         <div className="card-title" style={{
                             "box-sizing": "border-box",
                             "text-align": "center",
@@ -117,44 +115,29 @@ class TokenContainer extends Component {
                             "z-index": "2",
                             "overflow": "hidden"
                         }}>
-                            <div className="Bnfcry" style={{"fontSize": "14px"}}
-                                 onMouseOver="this.style.color='#B22222'"
-                                 onMouseOut="this.style.color='#000'">
+                            <div className="Bnfcry" style={{"fontSize": "14px"}}>
                                 <strong>Бенифициар </strong><span>{this.state.token_bnfcr}</span>
                             </div>
-                            <div className="starting" style={{"fontSize": "14px"}}
-                                 onMouseOver="this.style.color='#B22222'"
-                                 onMouseOut="this.style.color='#000'"><strong>Начальная
+                            <div className="starting" style={{"fontSize": "14px"}}>
+                                <strong>Начальная
                                 цена </strong><span
                                 style={{"color": "#b22222"}}>{this.state.token_startprice / 10 ** 18} bnb</span>
                             </div>
-                            <div className="Adress" style={{"fontSize": "14px"}}
-                                 onMouseOver="this.style.color='#B22222'"
-                                 onMouseOut="this.style.color='#000'">
+                            <div className="Adress" style={{"fontSize": "14px"}}>
                                 <strong>Aдрес </strong><span>{this.props.contract_address}</span></div>
-                            <div className="endTime" style={{"fontSize": "14px"}}
-                                 onMouseOver="this.style.color='#B22222'"
-                                 onMouseOut="this.style.color='#000'">
+                            <div className="endTime" style={{"fontSize": "14px"}}>
                                 <strong>Окончание </strong><span>{this.state.token_end_date}</span>
                             </div>
-                            <div className="highBidder" style={{"fontSize": "14px"}}
-                                 onMouseOver="this.style.color='#B22222'"
-                                 onMouseOut="this.style.color='#000'"><strong>Highest
+                            <div className="highBidder" style={{"fontSize": "14px"}}><strong>Highest
                                 bidder </strong><span>{this.state.token_highbidder}</span>
                             </div>
-                            <div className="highBidd" style={{"fontSize": "14px"}}
-                                 onMouseOver="this.style.color='#B22222'"
-                                 onMouseOut="this.style.color='#000'"><strong>Highest
+                            <div className="highBidd" style={{"fontSize": "14px"}}><strong>Highest
                                 bid </strong><span>{this.state.token_highbid / 10 ** 18} bnb</span>
                             </div>
-                            <div className="highBidd" style={{"fontSize": "14px"}}
-                                 onMouseOver="this.style.color='#B22222'"
-                                 onMouseOut="this.style.color='#000'"><strong>Минимальная
+                            <div className="highBidd" style={{"fontSize": "14px"}}><strong>Минимальная
                                 ставка </strong><span>{this.state.token_min_limit / 10 ** 18} bnb</span>
                             </div>
-                            <div className="highBidd" style={{"fontSize": "14px"}}
-                                 onMouseOver="this.style.color='#B22222'"
-                                 onMouseOut="this.style.color='#000'"><strong>Максимальная
+                            <div className="highBidd" style={{"fontSize": "14px"}}><strong>Максимальная
                                 ставка </strong><span>{this.state.token_max_limit / 10 ** 18} bnb</span>
                             </div>
                             <form onSubmit={(e) => {
