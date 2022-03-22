@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 import Web3 from 'web3';
-import MainPage from'./components/mainPage'
+import Auctions from './components/auctions'
 import ComPage from './components/comPage'
+import About from './components/About'
 import {
     BrowserRouter as Router,
     Switch,
@@ -67,8 +68,11 @@ class App extends Component {
                             <Route exact path="/closed">
                                 <ClosedAuctionsPage/>
                             </Route>
+                            <Route exact path="/auctions">
+                                <Auctions/>
+                            </Route>
                             <Route exact path="/">
-                                <MainPage/>
+                                <About/>
                             </Route>
                         </Switch>
                     </div>

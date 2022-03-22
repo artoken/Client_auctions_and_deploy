@@ -7,7 +7,7 @@ import DiamondContract from "../contracts/Diamond.json";
 import AuctionBox from "../contracts/AuctionBox.json";
 import TokenContainer from "../containers/tokenContainer";
 
-class MainPage extends Component {
+class Auctions extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -96,4 +96,4 @@ class MainPage extends Component {
     }
 }
 
-export default MainPage;
+export default Auctions;

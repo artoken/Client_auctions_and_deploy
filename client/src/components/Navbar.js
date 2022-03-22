@@ -27,11 +27,14 @@ class Navbar extends Component {
 				<div className="collapse navbar-collapse" id="navbarResponsive">
 					<ul className="navbar-nav ml-auto">
 						<li className="nav-item active">
-							<a href="/client" className="nav-link" >Главная</a>
+							<a href="/client" className="nav-link" >Токены</a>
+						</li>
+						<li className="nav-item">
+							<NavLink exact to="/" className="nav-link" activeStyle={{'color':'#fff', 'backgroundColor':'#277cfd', 'boxSizing': 'content-box'}} activeClassName={""}>О нас</NavLink>
 						</li>
 						<li className="nav-item">
 							{/*<a href="/" class="nav-link" style={{'color':'#fff', 'background-color':'#277cfd', 'box-sizing': 'content-box'}}>Аукционы</a>*/}
-							<NavLink exact to="/" className="nav-link" activeStyle={{'color':'#fff', 'backgroundColor':'#277cfd', 'boxSizing': 'content-box'}} activeClassName={""}>Аукционы</NavLink>
+							<NavLink exact to="/auctions" className="nav-link" activeStyle={{'color':'#fff', 'backgroundColor':'#277cfd', 'boxSizing': 'content-box'}} activeClassName={""}>Аукционы</NavLink>
 						</li>
 						<li className="nav-item">
 							{/*<a href="/" class="nav-link" style={{'color':'#fff', 'background-color':'#277cfd', 'box-sizing': 'content-box'}}>Аукционы</a>*/}
