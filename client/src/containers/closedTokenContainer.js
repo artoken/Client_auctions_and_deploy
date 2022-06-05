@@ -40,7 +40,6 @@ class TokenContainer extends Component {
         this.setState({token_startprice: await contract.methods.auctionMinimalBidPrice().call()})
 
 
-
         let art_contract = new window.web3.eth.Contract(DiamondContract.abi, DiamondContract.networks["5777"].address)
         this.setState({token_link: await art_contract.methods.tokenURI(this.state.token_id).call()})
 
@@ -49,26 +48,25 @@ class TokenContainer extends Component {
 
 
     async deposit(amount, address) {
-        // amount = amount*(10**18)
-        var nonce = crypto.randomBytes(32).toString("hex");
+        const nonce = crypto.randomBytes(32).toString("hex");
         const auction_contract = this.state.auction_contract;
-        var bidhash = ethers.utils.keccak256(ethers.utils.solidityPack(['uint256', 'string'], [amount, nonce]));
-        console.log("bidhash: ", bidhash);
+        const bidHash = ethers.utils.keccak256(ethers.utils.solidityPack(['uint256', 'string'], [amount, nonce]));
+        console.log("bidhash: ", bidHash);
 
         try {
-            await auction_contract.methods.bid(bidhash).send({from: this.state.account})
+            await auction_contract.methods.bid(bidHash).send({from: this.state.account})
             const nonces = {...JSON.parse(localStorage.getItem('nonces'))};
             if (!nonces[this.state.account]) {
                 nonces[this.state.account] = {}
             }
             nonces[this.state.account][this.props.contract_address] = nonce;
             localStorage.setItem('nonces', JSON.stringify(nonces))
-        } catch (e) {
-            console.log('Error, deposit: ', e)
+        } catch (depositError) {
+            console.log('Error occurred on deposit attempt: ', depositError)
         }
     }
 
-    async approval(amount) {
+    async approveBid(amount) {
         var nonce = JSON.parse(localStorage.getItem("nonces"))[this.state.account][this.props.contract_address];
         const auction_contract = this.state.auction_contract;
         try {
@@ -81,8 +79,9 @@ class TokenContainer extends Component {
     async depositButton() {
         this.deposit(this.depositAmount.value, 0);
     }
+
     async approveButton() {
-        this.approval(this.depositAmount.value);
+        this.approveBid(this.depositAmount.value);
     }
 
     render() {
@@ -125,14 +124,14 @@ class TokenContainer extends Component {
                                 цена </strong><span
                                 style={{"color": "#b22222"}}>{this.state.token_startprice} bnb</span>
                             </div>
-                            <div className="Adress" style={{"fontSizehttps://reactjs.org/docs/error-decoder.html?invariant=231&args[]=onClick&args[]=object": "14px"}}>
+                            <div className="Adress"
+                                 style={{"fontSizehttps://reactjs.org/docs/error-decoder.html?invariant=231&args[]=onClick&args[]=object": "14px"}}>
                                 <strong>Aдрес </strong><span>{this.props.contract_address}</span></div>
                             <div className="endTime" style={{"fontSize": "14px"}}>
                                 <strong>Окончание </strong><span>{this.state.token_end_date}</span>
                             </div>
                             <form onSubmit={(e) => {
                                 e.preventDefault()
-
                             }}>
                                 <div>
 
@@ -147,7 +146,8 @@ class TokenContainer extends Component {
                                             required/>
                                           </span>
                                     <span><button type='submit'
-                                                  className='btn btn-primary mb-2' onClick={this.depositButton.bind(this)}>Сделать ставку</button></span>
+                                                  className='btn btn-primary mb-2'
+                                                  onClick={this.depositButton.bind(this)}>Сделать ставку</button></span>
                                     <span><button type='button' onClick={this.approveButton.bind(this)}
                                                   className='btn btn-primary mb-2 ml-2'>Доказать ставку</button></span>
                                 </div>
